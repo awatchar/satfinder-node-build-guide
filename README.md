@@ -118,6 +118,7 @@ Steps:
 ### 5.1 Requirements
 - Browser: **Chrome** or **Microsoft Edge** (Web Serial supported)
 - A stable USB cable (avoid data dropouts during flashing)
+![Data Cable](docs/images/DataCable.png)
 
 ### 5.2 Flash steps
 1. Connect the LILYGO board to your computer via USB
