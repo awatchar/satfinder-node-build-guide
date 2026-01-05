@@ -31,7 +31,7 @@ This repository provides a **single-file, end-to-end build guide** for deploying
 ---
 
 ## 2) Bill of Materials (BOM)
-
+![Hardware](docs/images/Hardware.png)
 ### Required
 - **LILYGO LoRa32 433 MHz (T3_V1.6.1)** with built-in **SMA female**
 - **TP-Link CPE210** (with onboard **3.3V header**)
