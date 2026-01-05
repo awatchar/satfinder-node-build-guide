@@ -113,6 +113,7 @@ Steps:
 ---
 
 ## 5) Flash TinyGS on LILYGO (Web Installer)
+![TinyGS Web Installer](docs/images/TinyGSInstaller.png)
 
 ### 5.1 Requirements
 - Browser: **Chrome** or **Microsoft Edge** (Web Serial supported)
@@ -240,6 +241,7 @@ To prevent duplicated or inconsistent SCHOOL codes across deployments, apply the
 ---
 
 ## 12) Final Commissioning Checklist (before closing the enclosure)
+![Final](docs/images/Final.jpg)
 
 - [ ] CPE210 SSID set to `SatFinder-<PROV>-<SCHOOL>` (2.4 GHz)
 - [ ] CPE210 Wi-Fi password set to `aa8a7a94`
