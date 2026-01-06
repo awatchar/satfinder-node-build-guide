@@ -128,6 +128,9 @@ Steps:
 4. Click **Install/Flash**, then select the correct serial port (COM)
 5. Wait until the process completes (do not disconnect USB during flashing)
 
+![Flash Instructions](docs/images/Flash.png)
+![Local Configuration](docs/images/LocalConfiguration.png)
+
 ### 5.3 Provisioning checklist (after flashing)
 - Set TinyGS Wi-Fi SSID / Password to match Section 3:
   - SSID: `SatFinder_<PROV>_<SCHOOL>`
