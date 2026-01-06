@@ -196,7 +196,7 @@ The CPE210 onboard 3.3V header can power the LILYGO stably via the JST-PH 2.0 ca
 ## 9) Station Naming Convention
 
 ### 9.1 Naming format
-**SatFinder_'<PROV>'_'<SCHOOL>'**
+**SatFinder_`<PROV>`_`<SCHOOL>`**
 
 - `<PROV>`: Province abbreviation in Thailand  
 - `<SCHOOL>`: School abbreviation (project-governed identifier)
