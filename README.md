@@ -138,6 +138,37 @@ Steps:
 - Confirm LoRa region/frequency plan is **433 MHz**
 - Set a station/device name following SatFinder naming rules (Section 8)
 
+### 5.4 Add the device to TinyGS (Register New Station via Telegram)
+
+After provisioning (Wi-Fi / LoRa / station naming), you must **register the device as a new station** in the TinyGS system.
+
+#### Steps
+1. **Read and record the OTP code** shown on the LILYGO **OLED** screen (TinyGS will display an OTP for registration).
+2. On your mobile phone, install **Telegram**, then join the TinyGS Telegram group:
+   - https://t.me/joinchat/DmYSElZahiJGwHX6jCzB3Q
+3. Open a **private chat** with: `@tinygs_personal_bot`
+4. Type the command:
+   - `/weblogin`  
+   The bot will reply with a **TinyGS Web Login URL**.
+5. Open the URL, then click **New Station**.
+6. Fill in the station registration form:
+   - **Station Name**: follow the project naming format: `SatFinder_<PROV>_<SCHOOL>`
+   - **OTP Code**: use the OTP recorded from the OLED
+   - **Latitude / Longitude**: use the school location (decimal degrees recommended)
+   - **Time Zone**: `Asia/Bangkok`
+   - **Admin Password** and **Confirm Password**: set an admin password for station management
+7. Click **Create Station**.
+8. Click **Done**.
+
+![Add TinyGS Telegram Bot](docs/images/AddBot.png)
+![Add Station](docs/images/AddStation.png)
+
+#### Notes (recommended)
+- Use the same string for:
+  - **Station Name (TinyGS)** = **CPE210 SSID** = `SatFinder_<PROV>_<SCHOOL>`
+- For Latitude/Longitude, you may copy coordinates from a maps service (ensure the point represents the school site).
+- Store the Admin Password securely (it is required for future station administration).
+
 ---
 
 ## 6) Integrate LILYGO into TP-Link CPE210
