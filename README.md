@@ -55,12 +55,12 @@ Configure the CPE210 first so the TinyGS node can join the correct Wi-Fi network
 ### 3.1 Wi-Fi naming rule (project standard)
 - **Band**: 2.4 GHz
 - **CPE210 SSID**: use the **same string as the SatFinder node name**
-  - Format: `SatFinder-<PROV>-<SCHOOL>`
+  - Format: `SatFinder_<PROV>_<SCHOOL>`
 - **CPE210 Password (WPA2-PSK)**: `aa8a7a94` (fixed for all SatFinder nodes)
 
 Example:
-- Node/Station name: `SatFinder-CMI-TU`
-- CPE210 SSID: `SatFinder-CMI-TU`
+- Node/Station name: `SatFinder_CMI_TU`
+- CPE210 SSID: `SatFinder_CMI_TU`
 - CPE210 Password: `aa8a7a94`
 
 ### 3.2 Step-by-step (recommended baseline settings)
@@ -68,7 +68,7 @@ Example:
 2. Log in to the CPE210 management interface (IP/URL may vary by configuration).
 3. Go to **Wireless** settings:
    - Set **Wireless Mode / Radio** to **2.4 GHz** (CPE210 is 2.4 GHz by design)
-   - Set **SSID** to `SatFinder-<PROV>-<SCHOOL>`
+   - Set **SSID** to `SatFinder_<PROV>_<SCHOOL>`
    - Set **Security** to **WPA2-PSK (AES)** (recommended)
    - Set **Password** to `aa8a7a94`
 4. Save/apply settings and confirm the SSID is visible in Wi-Fi scan results.
@@ -130,7 +130,7 @@ Steps:
 
 ### 5.3 Provisioning checklist (after flashing)
 - Set TinyGS Wi-Fi SSID / Password to match Section 3:
-  - SSID: `SatFinder-<PROV>-<SCHOOL>`
+  - SSID: `SatFinder_<PROV>_<SCHOOL>`
   - Password: `aa8a7a94`
 - Confirm LoRa region/frequency plan is **433 MHz**
 - Set a station/device name following SatFinder naming rules (Section 8)
@@ -196,7 +196,7 @@ The CPE210 onboard 3.3V header can power the LILYGO stably via the JST-PH 2.0 ca
 ## 9) Station Naming Convention
 
 ### 9.1 Naming format
-**SatFinder-<PROV>-<SCHOOL>**
+**SatFinder_'<PROV>'_'<SCHOOL>'**
 
 - `<PROV>`: Province abbreviation in Thailand  
 - `<SCHOOL>`: School abbreviation (project-governed identifier)
@@ -223,35 +223,35 @@ To prevent duplicated or inconsistent SCHOOL codes across deployments, apply the
 
 | Region (example) | Province | PROV (Roman) | SCHOOL (example) | Station Name / CPE210 SSID |
 |---|---|---:|---:|---|
-| Central | Bangkok | BKK | TUS | SatFinder-BKK-TUS |
-| North | Chiang Mai | CMI | PWS | SatFinder-CMI-PWS |
-| North | Chiang Rai | CRI | MHS | SatFinder-CRI-MHS |
-| Lower North | Phitsanulok | PLK | SCS | SatFinder-PLK-SCS |
-| West | Kanchanaburi | KRI | KWS | SatFinder-KRI-KWS |
-| Central | Nakhon Pathom | NPT | NPS | SatFinder-NPT-NPS |
-| East | Chonburi | CBI | CBS | SatFinder-CBI-CBS |
-| East | Rayong | RYG | RYS | SatFinder-RYG-RYS |
-| Northeast | Nakhon Ratchasima | NMA | NMS | SatFinder-NMA-NMS |
-| Northeast | Khon Kaen | KKN | KKS | SatFinder-KKN-KKS |
-| Northeast | Udon Thani | UDN | UDS | SatFinder-UDN-UDS |
-| Northeast | Ubon Ratchathani | UBN | UBS | SatFinder-UBN-UBS |
-| South (Andaman) | Phuket | PKT | PKS | SatFinder-PKT-PKS |
-| South (Gulf) | Surat Thani | SNI | SNS | SatFinder-SNI-SNS |
-| South | Songkhla | SKA | SKS | SatFinder-SKA-SKS |
+| Central | Bangkok | BKK | TUS | SatFinder_BKK_TUS |
+| North | Chiang Mai | CMI | PWS | SatFinder_CMI-PWS |
+| North | Chiang Rai | CRI | MHS | SatFinder_CRI-MHS |
+| Lower North | Phitsanulok | PLK | SCS | SatFinder_PLK_SCS |
+| West | Kanchanaburi | KRI | KWS | SatFinder_KRI_KWS |
+| Central | Nakhon Pathom | NPT | NPS | SatFinder_NPT_NPS |
+| East | Chonburi | CBI | CBS | SatFinder_CBI_CBS |
+| East | Rayong | RYG | RYS | SatFinder_RYG_RYS |
+| Northeast | Nakhon Ratchasima | NMA | NMS | SatFinder_NMA_NMS |
+| Northeast | Khon Kaen | KKN | KKS | SatFinder_KKN_KKS |
+| Northeast | Udon Thani | UDN | UDS | SatFinder_UDN_UDS |
+| Northeast | Ubon Ratchathani | UBN | UBS | SatFinder_UBN_UBS |
+| South (Andaman) | Phuket | PKT | PKS | SatFinder_PKT_PKS |
+| South (Gulf) | Surat Thani | SNI | SNS | SatFinder_SNI_SNS |
+| South | Songkhla | SKA | SKS | SatFinder_SKA_SKS |
 
 ---
 
 ## 12) Final Commissioning Checklist (before closing the enclosure)
 ![Final](docs/images/Final.jpg)
 
-- [ ] CPE210 SSID set to `SatFinder-<PROV>-<SCHOOL>` (2.4 GHz)
+- [ ] CPE210 SSID set to `SatFinder_<PROV>_<SCHOOL>` (2.4 GHz)
 - [ ] CPE210 Wi-Fi password set to `aa8a7a94`
 - [ ] CPE210 connected to PoE injector correctly (PoE → CPE210, LAN → Internet uplink)
 - [ ] The Internet uplink requires **no authentication** (no captive portal / 802.1X / PPPoE / web sign-in)
 - [ ] TinyGS flashed via https://installer.tinygs.com/
 - [ ] TinyGS Wi-Fi configured to match the CPE210 SSID/password
 - [ ] LoRa frequency plan is set to **433 MHz**
-- [ ] Station name follows `SatFinder-<PROV>-<SCHOOL>`
+- [ ] Station name follows `SatFinder_<PROV>_<SCHOOL>`
 - [ ] CPE210 powers LILYGO via **3.3V header → JST-PH 2.0** (verified polarity)
 - [ ] RF cable **SMA↔N (0.5 m)** is connected and routed safely
 - [ ] N-Type connects directly to **Eggbeater antenna**
