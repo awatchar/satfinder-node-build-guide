@@ -129,7 +129,7 @@ Steps:
 5. Wait until the process completes (do not disconnect USB during flashing)
 
 ![Flash Instructions](docs/images/Flash.png)
-![Local Configuration](docs/images/LocalConfiguration.png)
+![Local Configuration](docs/images/LocalConfigure.png)
 
 ### 5.3 Provisioning checklist (after flashing)
 - Set TinyGS Wi-Fi SSID / Password to match Section 3:
