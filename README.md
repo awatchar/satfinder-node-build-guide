@@ -19,7 +19,7 @@ This repository provides a **single-file, end-to-end build guide** for deploying
 - Connecting **CPE210 to the included PoE adapter** and to an **unauthenticated Internet uplink**
 - Flashing **TinyGS** on LILYGO LoRa32 (T3_V1.6.1, 433 MHz) via the official web installer
 - Mechanical integration inside a TP-Link CPE210 enclosure
-- Powering LILYGO from the CPE210’s **3.3V header** using the provided **JST-PH 2.0** cable
+- Powering LILYGO from the CPE210’s **3.3V header** using the provided **JST-SH 1.25** cable
 - Routing LoRa RF out of the enclosure using the provided **SMA-to-N Type** cable to an **Eggbeater antenna**
 - Standardized station naming and recommended SCHOOL code rules
 
@@ -35,7 +35,7 @@ This repository provides a **single-file, end-to-end build guide** for deploying
 ### Required
 - **LILYGO LoRa32 433 MHz (T3_V1.6.1)** with built-in **SMA female**
 - **TP-Link CPE210** (with onboard **3.3V header**)
-- **JST-PH 2.0 (2-pin)** cable (provided with the LILYGO)
+- **JST-SH 1.25 (2-pin)** cable (provided with the LILYGO)
 - **433 MHz Eggbeater Antenna** (SatFinder standard)
 - **SMA ↔ N-Type RF cable (~50 cm)** (provided by SatFinder)
 - **PoE adapter/injector** (included with the CPE210)
@@ -202,10 +202,10 @@ After provisioning (Wi-Fi / LoRa / station naming), you must **register the devi
 
 ---
 
-## 7) Power Wiring: CPE210 3.3V Header → JST-PH 2.0 → LILYGO
+## 7) Power Wiring: CPE210 3.3V Header → JST-SH 1.25 → LILYGO
 
 **Verified field behavior (SatFinder build):**  
-The CPE210 onboard 3.3V header can power the LILYGO stably via the JST-PH 2.0 cable.
+The CPE210 onboard 3.3V header can power the LILYGO stably via the JST-SH 1.25 cable.
 
 ### 7.1 Wiring principle
 - **CPE210 3.3V** → **JST red wire** → LILYGO (JST-PH)
@@ -305,7 +305,7 @@ To prevent duplicated or inconsistent SCHOOL codes across deployments, apply the
 - [ ] TinyGS Wi-Fi configured to match the CPE210 SSID/password
 - [ ] LoRa frequency plan is set to **433 MHz**
 - [ ] Station name follows `SatFinder_<PROV>_<SCHOOL>`
-- [ ] CPE210 powers LILYGO via **3.3V header → JST-PH 2.0** (verified polarity)
+- [ ] CPE210 powers LILYGO via **3.3V header → JST-SH 1.25** (verified polarity)
 - [ ] RF cable **SMA↔N (0.5 m)** is connected and routed safely
 - [ ] N-Type connects directly to **Eggbeater antenna**
 - [ ] No cable is pinched when closing the CPE210 enclosure
