@@ -211,6 +211,8 @@ The CPE210 onboard 3.3V header can power the LILYGO stably via the JST-PH 2.0 ca
 - **CPE210 3.3V** → **JST red wire** → LILYGO (JST-PH)
 - **CPE210 GND** → **JST black wire** → LILYGO (JST-PH)
 
+![Wiring&Place](docs/images/WireandPlace.png)
+
 ### 7.2 Safety checklist (recommended)
 - Confirm polarity at the 3.3V header (do not assume)
 - If possible, use a multimeter:
