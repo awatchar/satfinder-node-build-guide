@@ -163,6 +163,23 @@ After provisioning (Wi-Fi / LoRa / station naming), you must **register the devi
 ![Add TinyGS Telegram Bot](docs/images/AddBot.png)
 ![Add Station](docs/images/AddStation.png)
 
+### 5.5 Configure the Wireless Access Point (AP)
+
+#### Steps
+1. Connect the CPE210 to its PoE injector, then connect the LAN port to your computer.
+2. Open **Network Connections**, right-click **Ethernet**, and select **Properties**.
+3. Select **Internet Protocol Version 4 (TCP/IPv4)**, then click **Properties**.
+4. Set the IPv4 details: **IP Address:** 192.168.0.1, **Subnet Mask:** 255.255.255.0, **Default Gateway:** 192.168.0.254.
+5. Open a web browser and go to **[http://192.168.0.254](http://192.168.0.254)**. Log in with **Username:** admin, **Password:** admin.
+6. Change the password (recommended: keep **Username: admin** and set a strong new password).
+7. Go to **Wireless** settings.
+8. Set the **SSID** using the format: **SatFinder_<PROV>_<SCHOOL>_AP**.
+9. Click **Apply** to save the configuration.
+
+![Configure CPE210 Part 1](docs/images/CPE210-1.png)
+![Configure CPE210 Part 2](docs/images/CPE210-2.png)
+
+
 #### Notes (recommended)
 - Use the same string for:
   - **Station Name (TinyGS)** = **CPE210 SSID** = `SatFinder_<PROV>_<SCHOOL>`
