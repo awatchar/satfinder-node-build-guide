@@ -1,3 +1,5 @@
+Language: English | [ไทย](./README.th.md)
+
 # SatFinder TinyGS Node (LILYGO LoRa32 433 + TP-Link CPE210 + Eggbeater)
 
 ![SatFinder Telecom School](docs/images/SatFinder%20Telecom%20School.png)
