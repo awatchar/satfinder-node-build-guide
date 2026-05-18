@@ -1,4 +1,4 @@
-Language: English | [ไทย](./README.th.md)
+Revision: Rev2.0 | Previous version: [README Rev1.0](./README.rev1.0.md) | Language: English | [ไทย](./README.th.md)
 
 # SatFinder TinyGS Node (LILYGO LoRa32 433 + TP-Link CPE210 + Eggbeater)
 
@@ -6,26 +6,28 @@ Language: English | [ไทย](./README.th.md)
 
 This repository provides a **single-file, end-to-end build guide** for deploying a SatFinder LoRa node using:
 
-- **TinyGS** firmware (flashed via Web Installer)
-- **LILYGO LoRa32 433 MHz (T3_V1.6.1)** (built-in **SMA female**)
-- **TP-Link CPE210** (provides an onboard **3.3V header** to power the LILYGO)
-- **433 MHz Eggbeater Antenna** (SatFinder standard)
-- A provided **SMA ↔ N-Type RF cable (~50 cm)** routed from inside the CPE210 to the outside, then connected directly to the Eggbeater.
+- **TinyGS** firmware flashed through the Web Installer
+- **LILYGO LoRa32 433 MHz (T3_V1.6.1)** with built-in **SMA female**
+- **TP-Link CPE210**, already configured by the SatFinder project as the Wi-Fi access point for the node
+- **433 MHz Eggbeater Antenna** as the SatFinder antenna standard
+- A provided **SMA ↔ N-Type RF cable (~50 cm)** routed from inside the CPE210 to the outside, then connected directly to the Eggbeater
 
 ---
 
 ## 1) Scope and Design Choices
 
 ### What this repo covers
-- Configuring **CPE210 Wi-Fi SSID/Password (2.4 GHz)** using SatFinder naming rules
+- Using the **project-configured CPE210 Wi-Fi SSID/password** for TinyGS provisioning
 - Connecting **CPE210 to the included PoE adapter** and to an **unauthenticated Internet uplink**
-- Flashing **TinyGS** on LILYGO LoRa32 (T3_V1.6.1, 433 MHz) via the official web installer
+- Selecting the required **SatFinder station name** before flashing and provisioning TinyGS
+- Flashing **TinyGS** on LILYGO LoRa32 (T3_V1.6.1, 433 MHz) via the official Web Installer
+- Registering the new station in TinyGS through Telegram
 - Mechanical integration inside a TP-Link CPE210 enclosure
-- Powering LILYGO from the CPE210’s **3.3V header** using the provided **JST-SH 1.25** cable
+- Powering LILYGO from the CPE210 **3.3V header** using the provided **JST-SH 1.25** cable
 - Routing LoRa RF out of the enclosure using the provided **SMA-to-N Type** cable to an **Eggbeater antenna**
-- Standardized station naming and recommended SCHOOL code rules
 
 ### What this repo does not cover
+- CPE210 Wi-Fi/AP setup. The project already configures it before field use.
 - Network planning and site survey (RF path planning / Wi-Fi link design)
 - Advanced TinyGS tuning (SF/BW/CR optimization)
 - Custom PCB/3D printed parts (optional only)
@@ -34,253 +36,102 @@ This repository provides a **single-file, end-to-end build guide** for deploying
 
 ## 2) Bill of Materials (BOM)
 ![Hardware](docs/images/Hardware.png)
+
 ### Required
 - **LILYGO LoRa32 433 MHz (T3_V1.6.1)** with built-in **SMA female**
-- **TP-Link CPE210** (with onboard **3.3V header**)
-- **JST-SH 1.25 (2-pin)** cable (provided with the LILYGO)
-- **433 MHz Eggbeater Antenna** (SatFinder standard)
-- **SMA ↔ N-Type RF cable (~50 cm)** (provided by SatFinder)
-- **PoE adapter/injector** (included with the CPE210)
+- **TP-Link CPE210** with onboard **3.3V header**
+- **JST-SH 1.25 (2-pin)** cable, provided with the LILYGO
+- **433 MHz Eggbeater Antenna**, SatFinder standard
+- **SMA ↔ N-Type RF cable (~50 cm)**, provided by SatFinder
+- **PoE adapter/injector**, included with the CPE210
 
 ### Tools
-- Screwdriver (to open the CPE210)
-- Multimeter (highly recommended to confirm 3.3V and polarity before connecting)
+- Screwdriver, to open the CPE210
+- Multimeter, highly recommended to confirm 3.3V and polarity before connecting
 
-> Not used in this build: drilling/cutting tools, crimpers, wire strippers, nuts/bolts/washers (per the SatFinder kit workflow).
+> Not used in this build: drilling/cutting tools, crimpers, wire strippers, nuts/bolts/washers, per the SatFinder kit workflow.
 
 ---
 
-## 3) Configure TP-Link CPE210 Wi-Fi (SSID/Password) — 2.4 GHz
+## 3) Use the Project-Configured CPE210 Wi-Fi (No Wi-Fi Setup Step)
 
-Configure the CPE210 first so the TinyGS node can join the correct Wi-Fi network reliably during field deployment.
+The SatFinder project configures the TP-Link CPE210 Wi-Fi before deployment. Do **not** rename the Wi-Fi network during the build.
 
-### 3.1 Wi-Fi naming rule (project standard)
+- **CPE210 SSID**: `SatFinder_<MAC_LAST6>`
+- **MAC_LAST6**: the last 6 hexadecimal characters of the MAC address printed on the sticker on the back of the TP-Link CPE210, ignoring separators such as `:` or `-`
+- **Wi-Fi password**: `aa8a7a94`
 - **Band**: 2.4 GHz
-- **CPE210 SSID**: use the **same string as the SatFinder node name**
-  - Format: `SatFinder_<PROV>_<SCHOOL>`
-- **CPE210 Password (WPA2-PSK)**: `aa8a7a94` (fixed for all SatFinder nodes)
 
 Example:
-- Node/Station name: `SatFinder_CMI_TU`
-- CPE210 SSID: `SatFinder_CMI_TU`
-- CPE210 Password: `aa8a7a94`
+- Sticker MAC: `AA:BB:CC:12:34:56`
+- Last 6 MAC characters, without separators: `123456`
+- CPE210 SSID: `SatFinder_123456`
+- Password: `aa8a7a94`
 
-### 3.2 Step-by-step (recommended baseline settings)
-1. Power on the CPE210 (see Section 4) and connect a laptop/PC for initial setup.
-2. Log in to the CPE210 management interface (IP/URL may vary by configuration).
-3. Go to **Wireless** settings:
-   - Set **Wireless Mode / Radio** to **2.4 GHz** (CPE210 is 2.4 GHz by design)
-   - Set **SSID** to `SatFinder_<PROV>_<SCHOOL>`
-   - Set **Security** to **WPA2-PSK (AES)** (recommended)
-   - Set **Password** to `aa8a7a94`
-4. Save/apply settings and confirm the SSID is visible in Wi-Fi scan results.
-5. (Recommended) Disable features that may introduce surprises in the field:
-   - Avoid captive portal / web authentication features (if present)
-   - Ensure the SSID broadcast is enabled (not hidden) for simpler field operations
-
-> Operational note: Using the same SSID as the node name improves identification and reduces mis-association during multi-site deployments.
+Record the SSID from the sticker before TinyGS provisioning. This CPE210 Wi-Fi SSID is used for network connection only; the TinyGS station name still follows the SatFinder naming format in Section 5.
 
 ---
 
 ## 4) Connect CPE210 to PoE Adapter and Internet Uplink (No Authentication)
 
-TinyGS requires normal Internet connectivity and **does not support network authentication flows** (e.g., captive portal login, 802.1X, web-based sign-in).
+TinyGS requires normal Internet connectivity and **does not support network authentication flows** such as captive portal login, 802.1X, or web-based sign-in.
 
-### 4.1 PoE adapter wiring (included with CPE210)
+### 4.1 PoE adapter wiring
 Typical PoE injector ports:
-- **LAN** (data in from the network)
-- **PoE** (data + power out to the CPE210)
+- **LAN**: data in from the network
+- **PoE**: data + power out to the CPE210
 
 Steps:
 1. Connect an Ethernet cable from the **PoE** port of the injector to the **Ethernet port on the CPE210**.
 2. Connect an Ethernet cable from the school network/internet source to the **LAN** port of the injector.
-3. Plug the injector’s power adapter into AC mains.
+3. Plug the injector power adapter into AC mains.
 
-### 4.2 Internet uplink requirement (critical)
-- The Ethernet uplink connected to the injector **LAN** port must provide Internet access **without requiring any authentication**, such as:
-  - Captive portal (browser login page)
-  - 802.1X / enterprise authentication
-  - PPPoE credentials
-  - Any web-based sign-in workflow
+### 4.2 Internet uplink requirement
+The Ethernet uplink connected to the injector **LAN** port must provide Internet access **without requiring any authentication**, such as:
+- Captive portal, browser login page
+- 802.1X / enterprise authentication
+- PPPoE credentials
+- Any web-based sign-in workflow
 
 **Recommended approach for schools**
-- Use a standard router/switch port that provides DHCP + Internet directly (no sign-in).
-- If the school network requires authentication, provide a separate small router upstream that performs the authentication (if applicable) and exposes a normal NAT/DHCP LAN to the CPE210.
+- Use a standard router/switch port that provides DHCP + Internet directly.
+- If the school network requires authentication, use a small upstream router that handles authentication and exposes a normal NAT/DHCP LAN to the CPE210.
 
 ### 4.3 Quick verification checklist
-- The laptop connected to the same uplink can open a normal website **without** logging in.
+- A laptop connected to the same uplink can open a normal website without logging in.
 - DHCP lease is issued normally.
 - No “Sign in to network” prompt appears on client devices.
 
 ---
 
-## 5) Flash TinyGS on LILYGO (Web Installer)
-![TinyGS Web Installer](docs/images/TinyGSInstaller.png)
+## 5) Station Naming Convention and Examples
 
-### 5.1 Requirements
-- Browser: **Chrome** or **Microsoft Edge** (Web Serial supported)
-- A stable USB cable (avoid data dropouts during flashing)
-![Data Cable](docs/images/DataCable.png)
+Choose the station name **before** flashing/provisioning TinyGS. The same station name must be used during TinyGS local configuration and TinyGS station registration.
 
-### 5.2 Flash steps
-1. Connect the LILYGO board to your computer via USB
-2. Open the official TinyGS Web Installer:  
-   https://installer.tinygs.com/
-3. Select the correct device/board profile for **ESP32 + SX127x** (LILYGO LoRa32 family)
-4. Click **Install/Flash**, then select the correct serial port (COM)
-5. Wait until the process completes (do not disconnect USB during flashing)
-
-![Flash Instructions](docs/images/Flash.png)
-![Local Configuration](docs/images/LocalConfigure.png)
-
-### 5.3 Provisioning checklist (after flashing)
-- Set TinyGS Wi-Fi SSID / Password to match Section 3:
-  - SSID: `SatFinder_<PROV>_<SCHOOL>`
-  - Password: `aa8a7a94`
-- Confirm LoRa region/frequency plan is **433 MHz**
-- Set a station/device name following SatFinder naming rules (Section 8)
-
-### 5.4 Add the device to TinyGS (Register New Station via Telegram)
-
-After provisioning (Wi-Fi / LoRa / station naming), you must **register the device as a new station** in the TinyGS system.
-
-#### Steps
-1. **Read and record the OTP code** shown on the LILYGO **OLED** screen (TinyGS will display an OTP for registration).
-2. On your mobile phone, install **Telegram**, then join the TinyGS Telegram group:
-   - https://t.me/joinchat/DmYSElZahiJGwHX6jCzB3Q
-3. Open a **private chat** with: `@tinygs_personal_bot`
-4. Type the command:
-   - `/weblogin`  
-   The bot will reply with a **TinyGS Web Login URL**.
-5. Open the URL, then click **New Station**.
-6. Fill in the station registration form:
-   - **Station Name**: follow the project naming format: `SatFinder_<PROV>_<SCHOOL>`
-   - **OTP Code**: use the OTP recorded from the OLED
-   - **Latitude / Longitude**: use the school location (decimal degrees recommended)
-   - **Time Zone**: `Asia/Bangkok`
-   - **Admin Password** and **Confirm Password**: set an admin password for station management
-7. Click **Create Station**.
-8. Click **Done**.
-
-![Add TinyGS Telegram Bot](docs/images/AddBot.png)
-![Add Station](docs/images/AddStation.png)
-
-### 5.5 Configure the Wireless Access Point (AP)
-
-#### Steps
-1. Connect the CPE210 to its PoE injector, then connect the LAN port to your computer.
-2. Open **Network Connections**, right-click **Ethernet**, and select **Properties**.
-3. Select **Internet Protocol Version 4 (TCP/IPv4)**, then click **Properties**.
-4. Set the IPv4 details: **IP Address:** 192.168.0.1, **Subnet Mask:** 255.255.255.0, **Default Gateway:** 192.168.0.254.
-5. Open a web browser and go to **[http://192.168.0.254](http://192.168.0.254)**. Log in with **Username:** admin, **Password:** admin.
-6. Change the password (recommended: keep **Username: admin** and set a strong new password).
-7. Go to **Wireless** settings.
-8. Set the **SSID** using the format: **SatFinder_<PROV>_<SCHOOL>_AP**.
-9. Click **Apply** to save the configuration.
-
-![Configure CPE210 Part 1](docs/images/CPE210-1.png)
-![Configure CPE210 Part 2](docs/images/CPE210-2.png)
-
-
-#### Notes (recommended)
-- Use the same string for:
-  - **Station Name (TinyGS)** = **CPE210 SSID** = `SatFinder_<PROV>_<SCHOOL>`
-- For Latitude/Longitude, you may copy coordinates from a maps service (ensure the point represents the school site).
-- Store the Admin Password securely (it is required for future station administration).
-
----
-
-## 6) Integrate LILYGO into TP-Link CPE210
-
-### 6.1 Open the CPE210
-1. Disconnect power
-2. Open the enclosure carefully (avoid damaging internal cables)
-3. Locate the onboard **3.3V header** (provided on the CPE210 PCB)
-
-### 6.2 Place the LILYGO safely
-- Ensure the LILYGO board does **not** touch conductive surfaces
-- Use insulation under the board (e.g., thin plastic sheet / Kapton tape / insulation tape)
-- Route cables so they are not pinched when closing the enclosure
-
----
-
-## 7) Power Wiring: CPE210 3.3V Header → JST-SH 1.25 → LILYGO
-
-**Verified field behavior (SatFinder build):**  
-The CPE210 onboard 3.3V header can power the LILYGO stably via the JST-SH 1.25 cable.
-
-### 7.1 Wiring principle
-- **CPE210 3.3V** → **JST red wire** → LILYGO (JST-PH)
-- **CPE210 GND** → **JST black wire** → LILYGO (JST-PH)
-
-![Wiring&Place](docs/images/WireandPlace.png)
-
-### 7.2 Safety checklist (recommended)
-- Confirm polarity at the 3.3V header (do not assume)
-- If possible, use a multimeter:
-  - Measure ~3.3V between the intended 3.3V pin and GND
-- Only connect JST after polarity is confirmed
-
-### 7.3 Power-on test
-1. Power the CPE210 normally
-2. Confirm the LILYGO boots (LED / OLED status / TinyGS connectivity)
-3. Confirm TinyGS comes online after Wi-Fi association
-
----
-
-## 8) LoRa Antenna and RF Cable Routing (SMA → N-Type → Eggbeater)
-
-### 8.1 SatFinder antenna standard
-- Use **433 MHz Eggbeater Antenna** as the standard SatFinder LoRa antenna.
-
-### 8.2 RF connection workflow
-1. Inside the CPE210:
-   - Connect the **SMA end** of the provided **SMA↔N Type (~50 cm)** cable to the LILYGO’s **SMA female**
-2. Route the cable out of the CPE210:
-   - Use existing cable exits / routing paths (no drilling required for this kit workflow)
-   - Ensure the cable is not sharply bent or crushed by enclosure edges
-3. Outside the CPE210:
-   - Connect the **N-Type end** directly to the **Eggbeater antenna**
-
-### 8.3 Best practices
-- Avoid tight 90° bends; keep gentle curves to protect the coax and connector integrity
-- Provide strain relief so the SMA connector on the LILYGO does not take mechanical load
-
----
-
-## 9) Station Naming Convention
-
-### 9.1 Naming format
+### 5.1 Naming format and SCHOOL rules
 **SatFinder_`<PROV>`_`<SCHOOL>`**
 
-- `<PROV>`: Province abbreviation in Thailand  
-- `<SCHOOL>`: School abbreviation (project-governed identifier)
+- `<PROV>`: province abbreviation in Thailand
+- `<SCHOOL>`: project-governed school abbreviation
 
-### 9.2 Province abbreviations reference
+Recommended rules:
+1. Use uppercase ASCII letters and digits only: **[A-Z, 0-9]**.
+2. Length: **2-6 characters** for `<SCHOOL>`, recommended 3-5.
+3. Uniqueness: `<SCHOOL>` should be unique within the same province, ideally nationwide.
+4. Once used in a deployed station, do not change the name without a migration plan.
+
+Province abbreviation reference:
 https://th.wikipedia.org/wiki/รายชื่ออักษรย่อของจังหวัดในประเทศไทย
 
-> Recommendation: Prefer **Roman/ASCII abbreviations** to maximize compatibility with dashboards, logs, and IoT systems.
+> Recommendation: Prefer Roman/ASCII abbreviations for compatibility with dashboards, logs, and IoT systems.
 
----
+### 5.2 Quick examples
 
-## 10) Recommended SCHOOL rules (project standard)
-
-To prevent duplicated or inconsistent SCHOOL codes across deployments, apply the following rules:
-
-1) Use uppercase ASCII letters and digits only: **[A–Z, 0–9]**  
-2) Length: **2–6 characters** (recommended 3–5)  
-3) Uniqueness: must be unique within the same province (ideally nationwide)  
-4) Once used in a deployed station, do not change without a migration plan (to preserve dashboards and history)
-
----
-
-## 11) Quick Examples (15 samples across regions)
-
-| Region (example) | Province | PROV (Roman) | SCHOOL (example) | Station Name / CPE210 SSID |
+| Region (example) | Province | PROV (Roman) | SCHOOL (example) | TinyGS Station Name |
 |---|---|---:|---:|---|
 | Central | Bangkok | BKK | TUS | SatFinder_BKK_TUS |
-| North | Chiang Mai | CMI | PWS | SatFinder_CMI-PWS |
-| North | Chiang Rai | CRI | MHS | SatFinder_CRI-MHS |
+| North | Chiang Mai | CMI | PWS | SatFinder_CMI_PWS |
+| North | Chiang Rai | CRI | MHS | SatFinder_CRI_MHS |
 | Lower North | Phitsanulok | PLK | SCS | SatFinder_PLK_SCS |
 | West | Kanchanaburi | KRI | KWS | SatFinder_KRI_KWS |
 | Central | Nakhon Pathom | NPT | NPS | SatFinder_NPT_NPS |
@@ -296,45 +147,163 @@ To prevent duplicated or inconsistent SCHOOL codes across deployments, apply the
 
 ---
 
-## 12) Final Commissioning Checklist (before closing the enclosure)
-![Final](docs/images/Final.jpg)
+## 6) Flash TinyGS on LILYGO (Web Installer)
+![TinyGS Web Installer](docs/images/TinyGSInstaller.png)
 
-- [ ] CPE210 SSID set to `SatFinder_<PROV>_<SCHOOL>` (2.4 GHz)
-- [ ] CPE210 Wi-Fi password set to `aa8a7a94`
-- [ ] CPE210 connected to PoE injector correctly (PoE → CPE210, LAN → Internet uplink)
-- [ ] The Internet uplink requires **no authentication** (no captive portal / 802.1X / PPPoE / web sign-in)
-- [ ] TinyGS flashed via https://installer.tinygs.com/
-- [ ] TinyGS Wi-Fi configured to match the CPE210 SSID/password
-- [ ] LoRa frequency plan is set to **433 MHz**
-- [ ] Station name follows `SatFinder_<PROV>_<SCHOOL>`
-- [ ] CPE210 powers LILYGO via **3.3V header → JST-SH 1.25** (verified polarity)
-- [ ] RF cable **SMA↔N (0.5 m)** is connected and routed safely
-- [ ] N-Type connects directly to **Eggbeater antenna**
-- [ ] No cable is pinched when closing the CPE210 enclosure
+### 6.1 Requirements
+- Browser: **Chrome** or **Microsoft Edge** with Web Serial support
+- Stable USB data cable
+
+![Data Cable](docs/images/DataCable.png)
+
+### 6.2 Flash and initial configuration
+1. Connect the LILYGO board to your computer via USB.
+2. Open the official TinyGS Web Installer:  
+   https://installer.tinygs.com/
+3. Select the correct device/board profile for **ESP32 + SX127x** (LILYGO LoRa32 family).
+4. Click **Install/Flash**, then select the correct serial port (COM).
+5. Wait until flashing completes. Do not disconnect USB during flashing.
+6. During TinyGS local configuration, set Wi-Fi:
+   - **SSID**: `SatFinder_<MAC_LAST6>` from the CPE210 sticker
+   - **Password**: `aa8a7a94`
+7. Set the LoRa region/frequency plan to **433 MHz**.
+8. Set the TinyGS station/device name using the selected format from Section 5: `SatFinder_<PROV>_<SCHOOL>`.
+9. Save/apply the configuration, reboot if prompted, and confirm the device can come online.
+
+![Flash Instructions](docs/images/Flash.png)
+![Local Configuration](docs/images/LocalConfigure.png)
+
+### 6.3 Register New Station via Telegram
+
+After provisioning, register the device as a new station in TinyGS.
+
+1. Read and record the OTP code shown on the LILYGO **OLED** screen.
+2. On your mobile phone, install **Telegram**, then join the TinyGS Telegram group:
+   - https://t.me/joinchat/DmYSElZahiJGwHX6jCzB3Q
+3. Open a private chat with `@tinygs_personal_bot`.
+4. Type:
+   - `/weblogin`  
+   The bot will reply with a TinyGS Web Login URL.
+5. Open the URL, then click **New Station**.
+6. Fill in the station registration form:
+   - **Station Name**: use the same `SatFinder_<PROV>_<SCHOOL>` name from Section 5
+   - **OTP Code**: use the OTP recorded from the OLED
+   - **Latitude / Longitude**: use the school location, decimal degrees recommended
+   - **Time Zone**: `Asia/Bangkok`
+   - **Admin Password** and **Confirm Password**: set an admin password for station management
+7. Click **Create Station**.
+8. Click **Done**.
+
+![Add TinyGS Telegram Bot](docs/images/AddBot.png)
+![Add Station](docs/images/AddStation.png)
+
+Keep the Admin Password securely. It is required for future station administration.
 
 ---
 
-## 13) Troubleshooting (common field issues)
+## 7) Integrate LILYGO into TP-Link CPE210
+
+### 7.1 Open the CPE210
+1. Disconnect power.
+2. Open the enclosure carefully and avoid damaging internal cables.
+3. Locate the onboard **3.3V header** on the CPE210 PCB.
+
+### 7.2 Place the LILYGO safely
+- Ensure the LILYGO board does **not** touch conductive surfaces.
+- Use insulation under the board, such as thin plastic sheet, Kapton tape, or insulation tape.
+- Route cables so they are not pinched when closing the enclosure.
+
+---
+
+## 8) Power Wiring: CPE210 3.3V Header → JST-SH 1.25 → LILYGO
+
+**Verified field behavior (SatFinder build):**  
+The CPE210 onboard 3.3V header can power the LILYGO stably via the JST-SH 1.25 cable.
+
+### 8.1 Wiring principle
+- **CPE210 3.3V** → **JST red wire** → LILYGO (JST-PH)
+- **CPE210 GND** → **JST black wire** → LILYGO (JST-PH)
+
+![Wiring&Place](docs/images/WireandPlace.png)
+
+### 8.2 Safety checklist
+- Confirm polarity at the 3.3V header.
+- If possible, use a multimeter and measure about 3.3V between the intended 3.3V pin and GND.
+- Only connect JST after polarity is confirmed.
+
+### 8.3 Power-on test
+1. Power the CPE210 normally.
+2. Confirm the LILYGO boots by LED, OLED status, or TinyGS status.
+3. Confirm TinyGS comes online after Wi-Fi association.
+
+---
+
+## 9) LoRa Antenna and RF Cable Routing (SMA → N-Type → Eggbeater)
+
+### 9.1 SatFinder antenna standard
+- Use **433 MHz Eggbeater Antenna** as the standard SatFinder LoRa antenna.
+
+### 9.2 RF connection workflow
+1. Inside the CPE210:
+   - Connect the **SMA end** of the provided **SMA ↔ N Type (~50 cm)** cable to the LILYGO **SMA female**.
+2. Route the cable out of the CPE210:
+   - Use existing cable exits/routing paths. No drilling is required for this kit workflow.
+   - Ensure the cable is not sharply bent or crushed by enclosure edges.
+3. Outside the CPE210:
+   - Connect the **N-Type end** directly to the **Eggbeater antenna**.
+
+### 9.3 Best practices
+- Avoid tight 90° bends. Keep gentle curves to protect the coax and connector.
+- Provide strain relief so the SMA connector on the LILYGO does not take mechanical load.
+
+---
+
+## 10) Final Commissioning Checklist
+![Final](docs/images/Final.jpg)
+
+- [ ] CPE210 project Wi-Fi SSID recorded from the sticker: `SatFinder_<MAC_LAST6>`.
+- [ ] CPE210 Wi-Fi password used for TinyGS: `aa8a7a94`.
+- [ ] CPE210 connected to PoE injector correctly: PoE → CPE210, LAN → Internet uplink.
+- [ ] Internet uplink requires **no authentication**: no captive portal / 802.1X / PPPoE / web sign-in.
+- [ ] TinyGS flashed via https://installer.tinygs.com/.
+- [ ] TinyGS Wi-Fi configured to the CPE210 sticker SSID and project password.
+- [ ] LoRa frequency plan is set to **433 MHz**.
+- [ ] TinyGS station name follows `SatFinder_<PROV>_<SCHOOL>`.
+- [ ] Station registered in TinyGS with the OLED OTP and the same station name.
+- [ ] CPE210 powers LILYGO via **3.3V header → JST-SH 1.25** after polarity is verified.
+- [ ] RF cable **SMA ↔ N (0.5 m)** is connected and routed safely.
+- [ ] N-Type connects directly to **Eggbeater antenna**.
+- [ ] No cable is pinched when closing the CPE210 enclosure.
+
+---
+
+## 11) Troubleshooting
+
+### CPE210 Wi-Fi SSID is not visible
+- Confirm the CPE210 is powered through the PoE injector.
+- Confirm the expected SSID uses the last 6 MAC characters from the sticker, without separators: `SatFinder_<MAC_LAST6>`.
+- Confirm the client device can scan 2.4 GHz Wi-Fi.
 
 ### CPE210 has link but no Internet for TinyGS
-- Confirm the Ethernet uplink does not require authentication (no captive portal / 802.1X / PPPoE)
-- Verify the uplink provides DHCP + Internet directly
-- Test the uplink with a laptop: it must browse websites **without** any login
+- Confirm the Ethernet uplink does not require authentication.
+- Verify the uplink provides DHCP + Internet directly.
+- Test the uplink with a laptop; it must browse websites without login.
 
 ### Device boots but TinyGS stays offline
-- Recheck Wi-Fi SSID/password and signal coverage
-- Confirm successful flashing via the web installer
-- Power-cycle the CPE210 and confirm the LILYGO boots consistently
+- Recheck the TinyGS Wi-Fi SSID and password.
+- Confirm the SSID came from the CPE210 sticker, not from the TinyGS station name.
+- Confirm successful flashing via the Web Installer.
+- Power-cycle the CPE210 and confirm the LILYGO boots consistently.
 
 ### Random reboot / unstable behavior
-- Confirm 3.3V header polarity and connector firmness
-- Ensure cables are not intermittently shorting against metal/ground
-- Improve insulation and strain relief
+- Confirm 3.3V header polarity and connector firmness.
+- Ensure cables are not intermittently shorting against metal/ground.
+- Improve insulation and strain relief.
 
 ### Poor LoRa reception
-- Confirm Eggbeater is for 433 MHz and installed correctly
-- Confirm coax is not sharply bent or damaged
-- Move the antenna away from obstructions and strong EMI sources
+- Confirm Eggbeater is for 433 MHz and installed correctly.
+- Confirm coax is not sharply bent or damaged.
+- Move the antenna away from obstructions and strong EMI sources.
 
 ---
 
