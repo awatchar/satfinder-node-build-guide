@@ -156,7 +156,18 @@ https://th.wikipedia.org/wiki/รายชื่ออักษรย่อข�
 
 ![Data Cable](docs/images/DataCable.png)
 
-### 6.2 ขั้นตอนแฟลชและตั้งค่าเริ่มต้น
+### 6.2 ยืนยัน Wi-Fi SatFinder AP ก่อนแฟลช
+
+ก่อนเปิด TinyGS installer หรือหน้า local configuration ให้ยืนยันว่าคอมพิวเตอร์เชื่อมต่อกับ Wi-Fi SatFinder AP ตัวเดียวกับที่โหนดนี้จะใช้งานจริง
+
+1. เปิดรายการ Wi-Fi บนคอมพิวเตอร์
+2. เลือก SSID ของ CPE210 จากสติ๊กเกอร์: `SatFinder_<MAC_LAST6>`
+3. เชื่อมต่อด้วยรหัสผ่าน Wi-Fi ของโครงการ: `aa8a7a94`
+4. ยืนยันว่าเครือข่ายที่เชื่อมต่ออยู่คือ SatFinder AP ไม่ใช่ Home, Office หรือ Guest Wi-Fi
+
+![ตรวจ Wi-Fi ก่อนแฟลช](docs/images/BeforeFlashMakeSure.png)
+
+### 6.3 ขั้นตอนแฟลชและตั้งค่าเริ่มต้น
 1. ต่อบอร์ด LILYGO เข้ากับคอมพิวเตอร์ผ่าน USB
 2. เปิด TinyGS Web Installer ทางการ:  
    https://installer.tinygs.com/
@@ -173,7 +184,7 @@ https://th.wikipedia.org/wiki/รายชื่ออักษรย่อข�
 ![Flash Instructions](docs/images/Flash.png)
 ![Local Configuration](docs/images/LocalConfigure.png)
 
-### 6.3 ลงทะเบียนสถานีใหม่ผ่าน Telegram
+### 6.4 ลงทะเบียนสถานีใหม่ผ่าน Telegram
 
 หลัง provisioning เสร็จ ให้ลงทะเบียนอุปกรณ์เป็นสถานีใหม่ในระบบ TinyGS
 
@@ -198,6 +209,25 @@ https://th.wikipedia.org/wiki/รายชื่ออักษรย่อข�
 ![Add Station](docs/images/AddStation.png)
 
 เก็บ Admin Password ให้ปลอดภัย เพราะจำเป็นต่อการดูแลสถานีในอนาคต
+
+### 6.5 ตรวจสอบหรือแก้ Latitude/Longitude ก่อนประกอบ
+
+หลังลงทะเบียนสถานีแล้ว ให้ตรวจสอบพิกัดก่อนประกอบ LILYGO เข้าไปใน CPE210 เพราะ Latitude และ Longitude แก้ผ่าน local dashboard ได้ง่ายกว่าในช่วงที่โหนดยังอยู่บนโต๊ะทำงาน
+
+1. ให้คอมพิวเตอร์ยังเชื่อมต่อกับ Wi-Fi SatFinder AP: `SatFinder_<MAC_LAST6>`
+2. ใน Telegram private chat กับ `@tinygs_personal_bot` ให้พิมพ์:
+   - `/weblogin`  
+   บอทจะตอบกลับเป็น TinyGS Web Login URL
+3. เปิด URL แล้วเลือกสถานีที่ต้องการ
+4. ในหน้า station console/dashboard ให้คลิก **Local IP**
+5. ในหน้า local TinyGS dashboard ให้คลิก **Configure parameters**
+6. เมื่อเบราว์เซอร์ถาม username/password:
+   - **Username**: `admin`
+   - **Password**: ถ้ายังไม่เคยตั้งรหัสผ่าน local dashboard ให้ใช้ `12345678`; ถ้าเคยตั้งแล้วให้ใช้รหัสผ่าน local dashboard ที่ตั้งไว้
+7. แก้เฉพาะ **Latitude** และ **Longitude** ในรูปแบบ decimal degrees แล้วคลิก **Apply** ห้ามเปลี่ยน parameter อื่น เช่น station name, Wi-Fi SSID/password หรือ LoRa/frequency settings
+
+![หา Local IP เพื่อ Login](docs/images/FindIPtoLogin.png)
+![แก้ Latitude และ Longitude](docs/images/EditLatitudeandLongitude.png)
 
 ---
 
@@ -265,11 +295,13 @@ https://th.wikipedia.org/wiki/รายชื่ออักษรย่อข�
 - [ ] ใช้รหัสผ่าน CPE210 Wi-Fi สำหรับ TinyGS: `aa8a7a94`
 - [ ] ต่อ CPE210 กับ PoE injector ถูกต้อง: PoE → CPE210, LAN → Internet uplink
 - [ ] Internet uplink **ไม่ต้องยืนยันตัวตน**: ไม่มี captive portal / 802.1X / PPPoE / web sign-in
+- [ ] คอมพิวเตอร์เชื่อมต่อกับ Wi-Fi SatFinder AP ก่อนแฟลช/ตั้งค่า TinyGS แล้ว
 - [ ] แฟลช TinyGS ผ่าน https://installer.tinygs.com/ แล้ว
 - [ ] ตั้ง TinyGS Wi-Fi เป็น SSID จากสติ๊กเกอร์ CPE210 และรหัสผ่านโครงการแล้ว
 - [ ] ตั้งค่า LoRa frequency plan เป็น **433 MHz** แล้ว
 - [ ] ชื่อสถานี TinyGS เป็นไปตาม `SatFinder_<PROV>_<SCHOOL>`
 - [ ] ลงทะเบียนสถานีใน TinyGS ด้วย OLED OTP และชื่อสถานีเดียวกันแล้ว
+- [ ] ตรวจสอบหรือแก้ Latitude/Longitude ผ่าน Local IP dashboard ก่อนประกอบเข้า CPE210 แล้ว
 - [ ] CPE210 จ่ายไฟให้ LILYGO ผ่าน **3.3V header → JST-SH 1.25** หลังยืนยัน polarity แล้ว
 - [ ] สาย RF **SMA ↔ N (0.5 m)** ต่อและเดินสายอย่างปลอดภัยแล้ว
 - [ ] N-Type ต่อเข้ากับ **Eggbeater antenna** โดยตรงแล้ว
